@@ -1,0 +1,53 @@
+* {
+    border: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-size: 12px;
+    line-height: 1.2;
+    background-color: #fff;
+}
+
+main {
+    height: calc(100vh - 50px);
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    background-color: rgb(134, 59, 59);
+}
+
+
+footer {
+    /* position: absolute; */
+    height: 50px; 
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid #ccc;
+}
+
+footer>div {
+    text-align: center;
+    width: 33.333%;
+    padding: 5px 0 0 0;
+    /* flex: 1; */
+}
+
+footer>div>span {
+    display: block;
+}
+
+.active {
+    color: rgb(6,178,16);
+}
+
+main>section {
+    display: none;
+}
+
+main :first-child {
+    display: block;
+}
+
