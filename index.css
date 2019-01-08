@@ -15,7 +15,7 @@ main {
     height: calc(100vh - 50px);
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
-    background-color: rgb(134, 59, 59);
+    background-color:#ccc;
 }
 
 
