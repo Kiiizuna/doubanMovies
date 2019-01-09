@@ -47,7 +47,10 @@ main>section {
     display: none;
 }
 
-main :first-child {
+/* main :first-child {
+    display: block;
+} */
+
+.sec-active {
     display: block;
 }
-
