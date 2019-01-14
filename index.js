@@ -64,7 +64,6 @@ var ajax = function(method, path, headers, data, reseponseCallback) {
 }
 
 
-
 // ajax('GET', 'http://api.douban.com/v2/movie/top250', null, data1, function(r){
 //     console.log(r.status, r.response)
 // })
@@ -90,57 +89,104 @@ function getJSONP(url, callback) {
       // 函数调用之后不管发生什么都要移除对应的标签，留着也没用
       script.parentNode.removeChild(script);
     }
-
-
   }
-
   script.setAttribute('src', url)
   document.body.appendChild(script)
 
 }
 
 
-// getJSONP('http://api.douban.com/v2/movie/top250',function(e) {
-//     console.log(e)
-// })
-
-var jsonpRes
 getJSONP('http://api.douban.com/v2/movie/top250',function(e) {
     console.log('repsonse data is',e)
-    return e 
+    var movieArr = e.subjects
+    log('arr is', movieArr)
+    insertItems(movieArr)
 })
 
-log('jsonpRes is ', jsonpRes)
 
 // 拼接字符串
-var itemTemplate = function() {
+var movieTemplate = function(movie) {
+    var movieName = movie.title
+    var imgUrl = movie.images.medium
+    var score = movie.rating.average
+    var director0 = movie.directors[0].name
+    var cast0 = movie.casts[0].name
+    var cast1 = movie.casts[1].name
+    var cast2 = movie.casts[2].name
+    var year = movie.year
+    var genre0 = movie.genres[0]
+    var genre1 = movie.genres[1]
+    var alt = movie.alt
+    var genre 
+    var genreLen = movie.genres.length
+    if (genreLen === 1) {
+        genre = `
+        <div class="extra">${year} / ${genre0}</div>
+        `
+    } else if (genreLen === 1){
+        genre = `
+        <div class="extra">${year} / ${genre0}、${genre1}</div>
+        `        
+    } else {
+        genre = `
+        <div class="extra">${year} / ${genre0}、${genre0}、${genre1}</div>
+        `        
+    }
+
     var t = `
     <div class="item">
-                <a href="#">
+                <a href="${alt}">
                 <div class="cover">
-                    <img src="http://img1.doubanio.com/view/photo/s_ratio_poster/public/p480747492.jpg" alt="">
+                    <img src=${imgUrl} alt="">
                 </div>
                 <div class="detail">
-                    <h2>霸王别姬</h2>
-                    <div class="extra"><span class="score">9.3分</span> / 1000收藏</div>
-                    <div class="extra">1994 / 剧情、爱情</div>
-                    <div class="extra">导演: 张艺谋</div>
-                    <div class="extra">主演: 张艺谋、张艺谋、张艺谋</div>
+                    <h2>${movieName}</h2>
+                    <div class="extra"><span class="score">${score}分</span></div>
+                    `
+                    + genre + 
+                    `
+                    <div class="extra">导演: ${director0}</div>
+                    <div class="extra">主演: ${cast0}、${cast1}、${cast2}</div>
                 </div>
                 </a>
-            </div>
-    `
+            </div>   
+        `
     return t 
 }
 
-var appendHTML = function(element, html) {
-	element.insertAdjacentHTML('beforeend', html)
+// var appendHTML = function(element, html) {
+// 	element.insertAdjacentHTML('beforeend', html)
+// }
+
+
+// key function to insert different items
+var insertItems = function(movieList) {
+	var top250Wraper = e('.top250-wrapper')
+	// top250Wraper.innerHTML = '' 	
+	for (var i = 0; i < movieList.length; i++) {
+		var movie = movieList[i]
+		var t = movieTemplate(movie)
+		appendHTML(top250Wraper, t)
+	}
 }
 
+var bindEvent = function(element, eventName, callback) {
+	element.addEventListener(eventName, callback)
+}
 
-var main = e('.wrapper-main')
-// appendHTML(main, t)
-
-
-
-
+var wrapperMain = e('.wrapper-main')
+var index = 0
+bindEvent(wrapperMain, 'scroll', function() {
+    if (e('.top250-wrapper').offsetHeight === -17 + e('.wrapper-main').offsetHeight + e('.wrapper-main').scrollTop) {
+        log('到底啦')
+        index = index + 20
+        var url = 'http://api.douban.com/v2/movie/top250' + '?start=' + index + '&count=20'
+        getJSONP(url,function(e) {
+            console.log('repsonse data is',e)
+            var movieArr = e.subjects
+            log('arr is', movieArr)
+            insertItems(movieArr)
+        })
+    }
+    
+})
