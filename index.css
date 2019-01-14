@@ -15,7 +15,12 @@ main {
     height: calc(100vh - 50px);
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
-    background-color:#ccc;
+    /* background-color:#ccc; */
+}
+
+a {
+    text-decoration: none;
+    color: #333333;
 }
 
 
@@ -53,4 +58,33 @@ main>section {
 
 .sec-active {
     display: block;
+}
+
+/* 单个 item  */
+
+.item {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.item>a {
+    display: block;
+    display: flex;
+}
+.item .cover,.item .cover img{
+    width: 70px;
+}
+.item .detail {
+    flex: 1;
+    padding-left: 10px;
+}
+.item .detail h2{
+      
+}
+.item .detail .extra{
+    color: #999;
+    margin-top: 4px;
+}
+.item .detail .score{
+    color: #FF5722;
 }

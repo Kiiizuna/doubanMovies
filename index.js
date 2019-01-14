@@ -33,20 +33,17 @@ var bindTab = function() {
     })
 }
 
-
-
-
 bindTab()
 
 
-var num = {
-    start: 0,
-    count: 20,
-}
+// var num = {
+//     start: 0,
+//     count: 20,
+// }
 
-var data1 = JSON.stringify(num)
+// var data1 = JSON.stringify(num)
 
-log(data1)
+// log(data1)
 
 // ajax 函数
 var ajax = function(method, path, headers, data, reseponseCallback) {
@@ -68,6 +65,82 @@ var ajax = function(method, path, headers, data, reseponseCallback) {
 
 
 
-ajax('GET', 'http://api.douban.com/v2/movie/top250', null, data1, function(r){
-    console.log(r.status, r.response)
+// ajax('GET', 'http://api.douban.com/v2/movie/top250', null, data1, function(r){
+//     console.log(r.status, r.response)
+// })
+
+
+var responseHandler; // 定义一个全局作用域的函数
+
+function getJSONP(url, callback) {
+  if (url.indexOf('?') === -1) {
+    url += '?callback=responseHandler';
+  } else {
+    url += '&callback=responseHandler';
+  }
+
+  // 创建script 标签
+  var script = document.createElement('script')
+
+  // 在函数内部实现包裹函数，因为要用到 callback
+  responseHandler = function(json) {
+    try {
+      jsonpRes = callback(json)
+    } finally {
+      // 函数调用之后不管发生什么都要移除对应的标签，留着也没用
+      script.parentNode.removeChild(script);
+    }
+
+
+  }
+
+  script.setAttribute('src', url)
+  document.body.appendChild(script)
+
+}
+
+
+// getJSONP('http://api.douban.com/v2/movie/top250',function(e) {
+//     console.log(e)
+// })
+
+var jsonpRes
+getJSONP('http://api.douban.com/v2/movie/top250',function(e) {
+    console.log('repsonse data is',e)
+    return e 
 })
+
+log('jsonpRes is ', jsonpRes)
+
+// 拼接字符串
+var itemTemplate = function() {
+    var t = `
+    <div class="item">
+                <a href="#">
+                <div class="cover">
+                    <img src="http://img1.doubanio.com/view/photo/s_ratio_poster/public/p480747492.jpg" alt="">
+                </div>
+                <div class="detail">
+                    <h2>霸王别姬</h2>
+                    <div class="extra"><span class="score">9.3分</span> / 1000收藏</div>
+                    <div class="extra">1994 / 剧情、爱情</div>
+                    <div class="extra">导演: 张艺谋</div>
+                    <div class="extra">主演: 张艺谋、张艺谋、张艺谋</div>
+                </div>
+                </a>
+            </div>
+    `
+    return t 
+}
+
+var appendHTML = function(element, html) {
+	element.insertAdjacentHTML('beforeend', html)
+}
+
+
+var main = e('.wrapper-main')
+// appendHTML(main, t)
+
+
+
+
