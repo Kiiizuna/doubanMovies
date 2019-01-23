@@ -126,6 +126,7 @@ getJSONP('http://api.douban.com/v2/movie/top250',function(e) {
 
 
 var iconUS = e('.icon-us')
+// 点击了再发送 US 热门的请求
 bindEvent(iconUS, 'click', function() {
         getJSONP('http://api.douban.com/v2/movie/us_box',function(e) {
         console.log('us is',e)
@@ -133,11 +134,14 @@ bindEvent(iconUS, 'click', function() {
         insertNorthAmerica(movieArr)
     })
 })
+
+
+
 // getJSONP('http://api.douban.com/v2/movie/us_box',function(e) {
 //     console.log('us is',e)
 // })
 
-// 拼接字符串
+// 拼接字符串 top250 模板
 var movieTemplate = function(movie) {
     var movieName = movie.title
     var imgUrl = movie.images.small
@@ -187,6 +191,7 @@ var movieTemplate = function(movie) {
     return t 
 }
 
+// 北美地区电影模板
 var movieTemplateUS = function(movie) {
     var movieName = movie.subject.title
     var imgUrl = movie.subject.images.small
@@ -260,7 +265,34 @@ var insertNorthAmerica = function(movieList) {
 	}
 }
 
+var insertSearchItems = function(movieList) {
+	var searchWraper = e('.search-area')
+	// top250Wraper.innerHTML = '' 	
+	for (var i = 0; i < movieList.length; i++) {
+		var movie = movieList[i]
+		var t = movieTemplate(movie)
+		appendHTML(searchWraper, t)
+	}
+}
+
+
 // var bindEvent = function(element, eventName, callback) {
 // 	element.addEventListener(eventName, callback)
 // }
 
+
+
+var input = e('.search-input')
+var searchBtn = e('.button')
+bindEvent(searchBtn, 'click', function() {
+    var val = input.value
+    log('input val ', val)
+    var url = 'http://api.douban.com/v2/movie/search'
+    var searchUrl = url + '?' + 'q=' + val 
+        getJSONP(searchUrl,function(e) {
+        console.log('search list',e)
+        var movieArr = e.subjects
+        insertSearchItems(movieArr)
+
+    })
+})

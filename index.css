@@ -50,6 +50,7 @@ footer>div>span {
 
 main>section {
     display: none;
+    padding: 10px;
 }
 
 /* main :first-child {
@@ -107,4 +108,37 @@ main>section {
 @keyframes rotate {
     0% {transform: rotate(0deg);}
     100% {transform: rotate(360deg); }
+}
+
+
+/* input start */
+
+.search-wrapper .search-area>input {
+    width: calc(100% - 50px);
+    padding: 8px;
+    background-color: #eee;
+    border: none;
+    border-radius: 2px;
+    box-shadow: none;
+    outline: none;
+}
+
+.search-area {
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+
+
+section .search-area .button {
+    position: absolute;
+    right: 0;
+    padding: 8px 10px;
+    background: #FF5722;
+    background: rgb(6,178,16);
+
+    color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
 }
